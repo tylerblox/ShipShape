@@ -1,2 +1,3 @@
 # ShipShape
-Compares Illnesses InternetWide
+Compare Illnesses InternetWide
+

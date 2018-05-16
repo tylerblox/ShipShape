@@ -1,6 +1,16 @@
 import React, { Component } from 'react';
 import './App.css';
 import style_guide from './shipshape_style';
+import keys from './keys';
+const testGoogle = function(){
+  const googleCxId = keys.googleCxId
+  const googleKey = keys.googleApiKey
+
+  fetch('https://www.googleapis.com/customsearch/v1?key=+'+ googleKey +'&cx='+ googleCxId +'&q=ass\u0020rash&num=10&searchType=image')
+  .then((response)=> response.json())
+  .then((jsonInformation)=> console.log(jsonInformation))
+}
+testGoogle()
 
 const MainDivStyle={width:'90%',
                    margin:'auto',
@@ -30,10 +40,10 @@ class PhotoUploader extends React.Component{
  render() {
    return(
      <div className="well" style={{paddingBottom:'15px',
-                 width:'50%',
+                 width:'75%',
                  margin:'auto'
                  }}>
-       <button className="btn btn-success"style={{'padding':'50px','display':'inline-block'}}>
+       <button className="btn btn-success"style={{'padding':'15px','display':'inline-block'}}>
          Compare your BUTT!
        </button>
        <img src={this.props.photo} style={{
