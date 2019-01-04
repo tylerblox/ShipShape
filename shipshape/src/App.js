@@ -2,6 +2,11 @@ import React, { Component } from 'react';
 import './App.css';
 import style_guide from './shipshape_style';
 import keys from './keys';
+import ProbablyGuess from './components/ProbablyGuess'
+import MoreProof from './components/MoreProof'
+import PhotoUploader from './components/PhotoUploader'
+import ComparePhotos from './components/ComparePhotos'
+
 const testGoogle = function(){
   const googleCxId = keys.googleCxId
   const googleKey = keys.googleApiKey
@@ -18,61 +23,34 @@ const MainDivStyle={width:'90%',
                    color:'white',
                    padding:'15px'
                    }
-function MoreProof(props){
-     return(<button className="btn btn-primary" onClick={()=>{props.addProof()}}>
-         RENDER MORE PICTURES
-       </button>
-     )
-}
-class ProbablyGuess extends React.Component {
-  render(){
-    return(
-      <div>
-        <h3 style={{color:'white'}}>
-          ITS PROBABLY:
-        </h3>
-        {this.props.guess}
-      </div>)
-  }
-}
 
-class PhotoUploader extends React.Component{
- render() {
-   return(
-     <div className="well" style={{paddingBottom:'15px',
-                 width:'75%',
-                 margin:'auto'
-                 }}>
-       <button className="btn btn-success"style={{'padding':'15px','display':'inline-block'}}>
-         Compare your BUTT!
-       </button>
-       <img src={this.props.photo} style={{
-           'display':'inline-block',
-           'height':'150px',
-         }}/>
-     </div>
-   )
- }
-}
 
-class ComparePhotos extends React.Component{
-  render(){
-    let pics = this.props.photos
-    .map((photo)=> <img src={photo} style={{display:'inline-block',padding:'10px'}} />)
-    return(<ul>{pics}</ul>)
-  }
-}
+
 
 class App extends React.Component{
    constructor(props){
     super(props)
     this.state={
+      searchThumbnail:'butt',
       photo:'url',
-      allImg:[''],
-      allImg2:[],
+      allImg:{
+        row:{
+          0:{
+            images:['']
+          },
+          1:{
+            images:['']
+          }
+        }
+      },
       offset:0,
       upperBound:4
     }
+    this.componentReload = this.componentReload.bind(this)
+    this.renderMoreProof = this.renderMoreProof.bind(this)
+    this.fetchSearchThumbnail = this.fetchSearchThumbnail.bind(this)
+    this.fetchRowMatches = this.fetchRowMatches.bind(this)
+    this.fetchSecondRowMatches = this.fetchSecondRowMatches.bind(this)
   }
   renderMoreProof=(prev_o,prev_u)=>{
   console.log(prev_o)
@@ -83,30 +61,12 @@ class App extends React.Component{
     this.componentReload()
   }
   componentReload(){
-    console.log('REFRESH!')
-    fetch('https://www.googleapis.com/books/v1/volumes?q=ass&maxResults=40')
-    .then((data)=> data.json())
-    .then((jsondata)=>{
-        let c=jsondata['items'].slice(this.state.offset,this.state.upperBound)
-        return c.map((item)=>item.volumeInfo.imageLinks.thumbnail)
-        })
-    .then(info=>{
-        this.setState({allImg:info})}
-    )
-   console.log('fetch AGIN MOAR')
-   fetch('https://www.googleapis.com/books/v1/volumes?q=hole&maxResults=40')
-     .then((data)=> data.json())
-     .then((jsondata)=>{
-       let c=jsondata['items'].slice(this.state.offset,this.state.upperBound)
-       return c.map((item)=>item.volumeInfo.imageLinks.thumbnail)})
-     .then(info=>{
-       this.setState({allImg2:info})
-       }
-     )
-}
-  componentDidMount(){
-    console.log('starting to fetch')
-    fetch('https://www.googleapis.com/books/v1/volumes?q=butt')
+    this.fetchRowMatches()
+    this.fetchSecondRowMatches()
+  }
+  fetchSearchThumbnail = ()=>{
+    console.log('starting to fetch search thumbnail')
+    fetch('https://www.googleapis.com/books/v1/volumes?q=' + this.state.searchThumnail)
       .then((data)=> data.json())
       .then((jsondata)=>jsondata['items'][0].volumeInfo.imageLinks.thumbnail)
       .then(info=>{
@@ -114,29 +74,36 @@ class App extends React.Component{
         k.src=info
         this.setState({photo:k.src})
       })
-    window.setTimeout(()=>{
-      console.log('starting to fetch again!')
-      fetch('https://www.googleapis.com/books/v1/volumes?q=ass')
+  }
+  fetchRowMatches = (term='ass',row=0)=>{
+  const currState = this.state
+  window.setTimeout(()=>{
+      console.log('fetch row' + row)
+      fetch('https://www.googleapis.com/books/v1/volumes?q='+ term +'&maxResults=40')
         .then((data)=> data.json())
         .then((jsondata)=>{
-          let c=jsondata['items'].slice(this.state.offset,this.state.upperBound)
+          let c=jsondata['items'].slice(currState.offset,currState.upperBound)
           return c.map((item)=>item.volumeInfo.imageLinks.thumbnail)})
+        .catch((err)=>console.log(err))
         .then(info=>{
-          this.setState({allImg:info})
+          this.setState((function statify(){
+            let prevState=currState
+            let newState = Object.assign({},prevState)
+            newState.allImg.row[row].images = info
+            return {allImg:newState.allImg}
+        }()));
         })
-    },500)
-window.setTimeout(()=>{
-    console.log('fetch Moar')
-    fetch('https://www.googleapis.com/books/v1/volumes?q=hole')
-      .then((data)=> data.json())
-      .then((jsondata)=>{
-        let c=jsondata['items'].slice(this.state.offset,this.state.upperBound)
-        return c.map((item)=>item.volumeInfo.imageLinks.thumbnail)})
-      .then(info=>{
-        this.setState({allImg2:info})
-      })
-    },1000)  
-}
+    },0)
+  }
+  fetchSecondRowMatches = (term='hole',row=1)=>{
+    this.fetchRowMatches(term,row)
+  }
+
+  componentDidMount(){
+    this.fetchSearchThumbnail()
+    this.fetchRowMatches()
+    this.fetchSecondRowMatches()  
+  }
   render(props){
     return (
       <div style={{...MainDivStyle}}>
@@ -150,8 +117,8 @@ window.setTimeout(()=>{
         <MoreProof addProof=
            {()=>this.renderMoreProof(this.state.offset,this.state.upperBound)}
          />
-        <ComparePhotos photos={this.state.allImg}/>
-        <ComparePhotos photos={this.state.allImg2}/>
+        <ComparePhotos photos={this.state.allImg.row[0].images}/>
+        <ComparePhotos photos={this.state.allImg.row[1].images}/>
         <ProbablyGuess guess={'this will eventually be a best guess based on image recognition of what your rash actually is.'}/>
       </div>
     );
