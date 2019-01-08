@@ -23,11 +23,14 @@ export default class DonutChart extends React.Component{
 			.sort(null)
 			.value((d) => d.value)
 		this.arc = d3.arc()
-			.outerRadius(this.radius)
-			.innerRadius(this.radius-60)
+			.outerRadius(this.radius-20)
+			.innerRadius(this.radius-80)
 		this.labelArc = d3.arc()
 			.outerRadius(this.radius-60)
 			.innerRadius(this.radius-90)
+		this.pathTwo = d3.arc()
+  		.outerRadius(this.radius)
+  		.innerRadius(this.radius - 60);
 
 	}
 	pieTween(b){
@@ -37,6 +40,17 @@ export default class DonutChart extends React.Component{
 		return function(t){return self.arc(i(t))};
 	}
 	renderChart(){
+		
+
+
+  // .on('mouseout', function(d) {
+  //   const tooltip = d3.select('.tooltip')
+  //     .style('display', 'none')
+  
+  //   d3.select(this)
+  //     .transition()
+  //     .attr('d', path);
+  // });
 		window.setTimeout(()=>{
 			const self = this
 			const color = d3.scaleOrdinal()
@@ -54,6 +68,22 @@ export default class DonutChart extends React.Component{
 			g.append('path')
 			.attr('d',self.arc)
 			.on("mouseenter", (e)=>self.props.onMouseOver(e))
+			.on('mouseover', function(d) {
+   				 d3.select(this)
+      			.transition()
+      			.style('cursor', 'pointer')
+      			.attr('d', self.pathTwo);
+  
+    			const tooltip = d3.select('.tooltip')
+      			.style('display', 'inherit');})
+			.on('mouseout', function(d) {
+    			const tooltip = d3.select('.tooltip')
+      			.style('display', 'none')
+  
+    			d3.select(this)
+      			.transition()
+      			.attr('d', self.arc);
+  			})
 			.attr('id',function(d,i){return 'chart-piece-' + i})
 			.style('fill',(d)=>{return color(d.data.name)})
 			.style ("stroke", "white")

@@ -12,6 +12,7 @@ export default class Statistics extends React.Component {
 	    	highlightedSlice:null
 	    }
 	    this.data = [{name:'T',value:30},{name:'K',value:50},{name:'S',value:50}]
+	    this.secondaryData = [{name:'Cool',value:13},{name:'Hot',value:55},{name:'Medium',value:31}]
 	    this.mouseOver = this.mouseOver.bind(this)
 	}
 	mouseOver(e){
@@ -21,7 +22,10 @@ export default class Statistics extends React.Component {
 		return(
 			<div>
 			<DonutChart data={this.data} onMouseOver={(e) => this.mouseOver(e)} onMouseLeave={(e) => this.mouseLeave(e)}/>
+			
 			<StatsShow highlightedSlice={this.state.highlightedSlice}/>
+
+			<DonutChart data={this.secondaryData} onMouseOver={(e) => this.mouseOver(e)} onMouseLeave={(e) => this.mouseLeave(e)}/>
 			</div>
 		)
 	}
