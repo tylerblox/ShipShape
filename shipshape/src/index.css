@@ -3,7 +3,15 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
-.statistics__table{float:left;}
+thead{
+		font-size:3em;
+}
+tbody{
+	font-size:2em;
+}
+.statistics__table{
+	float:left;
+	}
 .statistics__chart{float:left;}
 
 

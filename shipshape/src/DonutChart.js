@@ -26,8 +26,8 @@ export default class DonutChart extends React.Component{
 			.outerRadius(this.radius)
 			.innerRadius(this.radius-60)
 		this.labelArc = d3.arc()
-			.outerRadius(this.radius-35)
-			.innerRadius(this.radius-35)
+			.outerRadius(this.radius-60)
+			.innerRadius(this.radius-90)
 
 	}
 	pieTween(b){
@@ -65,10 +65,7 @@ export default class DonutChart extends React.Component{
 			return new Promise((resolve) => {
 				window.setTimeout(()=>{g.append('text')
 				.attr('transform',(d)=> `translate(${self.labelArc.centroid(d)})`)
-				.text(function(d){return d.data.name})
-				.transition()
-				.duration(1500)
-				.attr("x",-25)},1000)
+				.text(function(d){return d.data.name})},1000)
 				}
 			)
 		},0)
