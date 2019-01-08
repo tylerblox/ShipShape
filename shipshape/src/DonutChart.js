@@ -53,19 +53,22 @@ export default class DonutChart extends React.Component{
 				.attr('class','arc')
 			g.append('path')
 			.attr('d',self.arc)
+			.on("mouseenter", (e)=>self.props.onMouseOver(e))
+			.attr('id',function(d,i){return 'chart-piece-' + i})
 			.style('fill',(d)=>{return color(d.data.name)})
 			.style ("stroke", "white")
 			.transition()
 			.duration(1500)
 			.ease(d3.easeBounce)
 			.attrTween("d", self.pieTween)
+
 			return new Promise((resolve) => {
 				window.setTimeout(()=>{g.append('text')
 				.attr('transform',(d)=> `translate(${self.labelArc.centroid(d)})`)
 				.text(function(d){return d.data.name})
 				.transition()
 				.duration(1500)
-				.attr("x",-25)},500)
+				.attr("x",-25)},1000)
 				}
 			)
 		},0)
@@ -75,6 +78,6 @@ export default class DonutChart extends React.Component{
 		this.renderChart()
 	}
 	render(){
-		return(	<div id="d-chart"></div>)
+		return(	<div id="d-chart" className="statistics__chart"></div>)
 	}
 }
