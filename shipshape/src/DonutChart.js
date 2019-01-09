@@ -29,7 +29,7 @@ export default class DonutChart extends React.Component{
 			.innerRadius(this.radius-110)
 		this.pathTwo = d3.arc()
   		.outerRadius(this.radius)
-  		.innerRadius(this.radius - 60);
+  		.innerRadius(this.radius - 80);
 
 	}
 	pieTween(b){
@@ -84,7 +84,7 @@ export default class DonutChart extends React.Component{
 			.style ("stroke-width", "3px")
 			.transition()
 			.duration(1500)
-			.ease(d3.easeBounce)
+			.ease(d3.easeCircleOut) // https://github.com/d3/d3-ease different types of easing
 			.attrTween("d", self.pieTween)
 
 			return new Promise((resolve) => {
