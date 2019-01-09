@@ -1,7 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './App.css';
-import style_guide from './shipshape_style';
-import keys from './keys';
+
 import * as d3 from "d3";
 
 // code inspired by https://www.youtube.com/watch?v=kK5kKA-0PUQ
@@ -72,14 +71,9 @@ export default class DonutChart extends React.Component{
    				 d3.select(this)
       			.transition()
       			.style('cursor', 'pointer')
-      			.attr('d', self.pathTwo);
-  
-    			const tooltip = d3.select('.tooltip')
-      			.style('display', 'inherit');})
+      			.attr('d', self.pathTwo)
+      		})
 			.on('mouseout', function(d) {
-    			const tooltip = d3.select('.tooltip')
-      			.style('display', 'none')
-  
     			d3.select(this)
       			.transition()
       			.attr('d', self.arc);

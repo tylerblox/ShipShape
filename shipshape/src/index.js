@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 // import App from './App';
-import DonutChart from './DonutChart';
+// import DonutChart from './DonutChart';
 import Statistics from './Statistics';
 import registerServiceWorker from './registerServiceWorker';
 

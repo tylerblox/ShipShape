@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './App.css';
-import style_guide from './shipshape_style';
-import keys from './keys';
+
 import DonutChart from './DonutChart';
-import * as d3 from "d3";
+
 
 export default class Statistics extends React.Component {
 	constructor(props){
@@ -11,9 +10,12 @@ export default class Statistics extends React.Component {
 	    this.state={
 	    	highlightedSlice:null
 	    }
-	    this.data = [{name:'T',value:30},{name:'K',value:50},{name:'S',value:50}]
+	    this.data = [{name:'T',value:30},{name:'K',value:50},{name:'S',value:50}] 
+	    //data will need to be formatted. {name:x, value:y} even if donut chart should change.
+	    //data for the new chart should be changed to that format.
 	    this.secondaryData = [{name:'Cool',value:13},{name:'Hot',value:55},{name:'Medium',value:31}]
 	    this.mouseOver = this.mouseOver.bind(this)
+	    this.grandTotal = this.data.reduce((a,b) => a + b.value, 0)
 	}
 	mouseOver(e){
 		this.setState({highlightedSlice:e.data})
@@ -23,7 +25,7 @@ export default class Statistics extends React.Component {
 			<div>
 			<DonutChart data={this.data} onMouseOver={(e) => this.mouseOver(e)} onMouseLeave={(e) => this.mouseLeave(e)}/>
 			
-			<StatsShow highlightedSlice={this.state.highlightedSlice}/>
+			<StatsShow grandTotal={this.grandTotal} highlightedSlice={this.state.highlightedSlice}/>
 
 			</div>
 		)
@@ -63,6 +65,15 @@ class StatsShow extends React.Component {
 						
 							<td>
 								{this.props.highlightedSlice.value}
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Percent
+							</td>
+						
+							<td>
+								{`${(this.props.highlightedSlice.value/this.props.grandTotal*100).toFixed(2)}%`}
 							</td>
 						</tr>
 						</tbody>
