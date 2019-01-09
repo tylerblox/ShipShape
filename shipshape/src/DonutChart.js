@@ -26,8 +26,8 @@ export default class DonutChart extends React.Component{
 			.outerRadius(this.radius-20)
 			.innerRadius(this.radius-80)
 		this.labelArc = d3.arc()
-			.outerRadius(this.radius-60)
-			.innerRadius(this.radius-90)
+			.outerRadius(this.radius-90)
+			.innerRadius(this.radius-110)
 		this.pathTwo = d3.arc()
   		.outerRadius(this.radius)
   		.innerRadius(this.radius - 60);
@@ -87,6 +87,7 @@ export default class DonutChart extends React.Component{
 			.attr('id',function(d,i){return 'chart-piece-' + i})
 			.style('fill',(d)=>{return color(d.data.name)})
 			.style ("stroke", "white")
+			.style ("stroke-width", "3px")
 			.transition()
 			.duration(1500)
 			.ease(d3.easeBounce)

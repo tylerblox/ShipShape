@@ -25,7 +25,6 @@ export default class Statistics extends React.Component {
 			
 			<StatsShow highlightedSlice={this.state.highlightedSlice}/>
 
-			<DonutChart data={this.secondaryData} onMouseOver={(e) => this.mouseOver(e)} onMouseLeave={(e) => this.mouseLeave(e)}/>
 			</div>
 		)
 	}
