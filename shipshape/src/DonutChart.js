@@ -8,8 +8,9 @@ export default class DonutChart extends React.Component{
 	constructor(props){
 	    super(props)
 	    this.state={
-
+	    	data:this.props.data,
 	    }
+	    this.rerender = true
 	    this.input = this.props.data || [{name:'Tyler',value:30},{name:'Other',value:50},{name:'MyNameJeff',value:50},{name:'Kanye',value:50},{name:'Special',value:50}]
 	    this.initialStartAngle = 0
 	    this.initialEndAngle = 0
@@ -50,6 +51,7 @@ export default class DonutChart extends React.Component{
   //     .transition()
   //     .attr('d', path);
   // });
+
 		window.setTimeout(()=>{
 			const self = this
 			const color = d3.scaleOrdinal()
@@ -94,12 +96,23 @@ export default class DonutChart extends React.Component{
 				}
 			)
 		},0)
+		return(	<div id={'d-chart'} className="statistics__chart"></div>)
 	}
 	
-	componentDidMount(){
-		this.renderChart()
+	componentWillUpdate(props){
+		const propData = JSON.stringify(props.data)
+		const existingData = JSON.stringify(this.input)
+		if(propData !== existingData){
+			const elem = document.querySelector('svg');
+			elem.parentNode.removeChild(elem)
+			this.input = props.data
+			this.rerender = true
+			// this.randID = Math.random().toString()
+		} else {this.rerender = false}		 
 	}
 	render(){
-		return(	<div id="d-chart" className="statistics__chart"></div>)
+		if (this.rerender){console.log('rendering');
+			return this.renderChart()
+		} else {return 	<div id={'d-chart'} className="statistics__chart"></div>}
 	}
 }
